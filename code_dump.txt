@@ -1,0 +1,87 @@
+        //test chart
+        d3.csv('https://s3-us-west-2.amazonaws.com/s.cdpn.io/2814973/atp_wta.csv').then(makeChart);
+
+        function makeChart(players) {
+            /* JavaScript’s .map() function to convert the array of objects into an array of player names and an array of weeks. We created a bar chart using Chart.js and used these two arrays to set the player labels and bar lengths.*/
+            //get all the x axis (u can get this from the csv col name)
+            var playerLabels = players.map(function(d) {return d.Name});
+            //then get all the y axis 
+            var weeksData = players.map(function(d) {return d.Weeks});
+
+            var chart = new Chart('chart', {
+                type: 'horizontalBar',
+                data: {
+                  labels: playerLabels,
+                  datasets: [
+                    {
+                      data: weeksData
+                    }
+                  ]
+                }
+            });
+            }
+
+
+        function makeHBarChart(country) {
+            /* JavaScript’s .map() function to convert the array of objects into an array of player names and an array of weeks. We created a bar chart using Chart.js and used these two arrays to set the player labels and bar lengths.*/
+            //get all the x axis (u can get this from the csv col name)
+            var countryNames = country.map(function(d) {return d.Country});
+            //then get all the y axis 
+            var countryConfirmed = country.map(function(d) {return d.Confirmed});
+            //if want to highlight the bar colour
+            var playerColors = country.map(function(d) {return d.Confirmed > 30000 ? '#F15F36' : '#19A0AA';});
+
+            var chart = new Chart('hBarChart', {
+                type: 'horizontalBar',
+                data: {
+                  labels: countryNames,
+                  datasets: [
+                    {
+                      data: countryConfirmed
+                    }
+                  ]
+                }
+            });
+        }
+
+
+
+                    function makeHBarChart(country) {
+            /* JavaScript’s .map() function to convert the array of objects into an array of player names and an array of weeks. We created a bar chart using Chart.js and used these two arrays to set the player labels and bar lengths.*/
+            //get all the x axis (u can get this from the csv col name)
+            var countryNames = country.map(function(d) {return d.Country});
+            //then get all the y axis 
+            var countryConfirmed = country.map(function(d) {return d.Confirmed});
+            //if want to highlight the bar colour
+            var countryColors = country.map(function(d) {return d.Confirmed > 30000 ? '#F15F36' : '#19A0AA';});
+
+            var chart = new Chart('hBarChart', {
+                type: 'horizontalBar',
+                options: {
+                  maintainAspectRatio: false,
+                  legend: {
+                    display: false
+                  },
+                  scales: {
+                    xAxes: [
+                      {
+                        scaleLabel: {
+                          display: true,
+                          labelString: '# of Cases',
+                          fontSize: 16
+                        }
+                      }
+                    ]
+                  }
+                },
+                data: {
+                  labels: countryNames,
+                  datasets: [
+                    {
+                      data: countryConfirmed,
+                      backgroundColor: countryColors
+                    }
+                  ]
+                }
+              })
+            }
