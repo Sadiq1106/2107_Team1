@@ -29,11 +29,14 @@
         Chart.defaults.global.defaultFontFamily = 'Roboto';
         Chart.defaults.global.defaultFontColor = '#333';
 
-        d3.csv('static/csv/country_covid.csv').then(makeHBarChart)
+        //d3.csv('static/csv/country_covid.csv').then(old)
         makePieChart()
+        makePolarAreaChart()
+        makeRadarChart()
+        makeHBarChart()
 
         //Bar Chart: Y Axis: Country ; X Axis: Confirmed COVID Cases
-        function makeHBarChart(country) {
+        function old(country) {
             /* JavaScript’s .map() function to convert the array of objects into an array of player names and an array of weeks. We created a bar chart using Chart.js and used these two arrays to set the player labels and bar lengths.*/
             //get all the x axis (u can get this from the csv col name)
             var countryNames = country.map(function(d) {return d.Country});
@@ -73,12 +76,12 @@
             })
         }
 
-        //pie chart but doesnt really take in any csv values
+        //pie chart
         function makePieChart(){
             var myChart = new Chart('pieChart', {
                 type: 'pie',
                 data: {
-                    labels: ['OK', 'WARNING', 'CRITICAL', 'UNKNOWN'],
+                    labels: ['OK', 'KO', 'GGWP', 'KMS'],
                     datasets: [{
                     label: '# of Tomatoes',
                     data: [12, 19, 3, 5],
@@ -100,11 +103,96 @@
                 options: {
                 //cutoutPercentage: 40,
                 responsive: false,
-
+                title: {
+                    display: true,
+                    text: 'Annie R u OK'
+                  }
                 }
                 });
         }
+        //Polar Area Chart
+        function makePolarAreaChart(){
+            var polarAreaChart = new Chart('paChart', {
+              type: 'polarArea',
+              data: {
+              labels: ["Negative","Positive","Neutral","Unknwon"],
+              datasets: [{
+                data: [1200, 1700, 800, 200],
+                backgroundColor: [
+                  "rgba(255, 0, 0, 0.5)",
+                  "rgba(100, 255, 0, 0.5)",
+                  "rgba(200, 50, 255, 0.5)",
+                  "rgba(0, 100, 255, 0.5)"
+                ]
+              }]
+            },
+                options: {
+                //cutoutPercentage: 40,
+                responsive: false,
+                title: {
+                    display: true,
+                    text: 'Sentiment Analysis'
+                  }
+                }
+            });       
+        }
 
+        //Scriptable Radar Chart to show sentiment analysis 
+        function makeRadarChart(){
+            var radarChart = new Chart('radarChart', {
+              type: 'radar',
+              data: {
+              labels: ["Sitang", "Mader", "Purnima", "Some Random Internet Baby", "Some Random Cat", "Green Tea"],
+              datasets: [{
+                label: "Sitang",
+                backgroundColor: "rgba(64,224,208,0.5)",
+                data: [65, 75, 70, 80, 60, 80]
+              }, {
+                label: "Purnima",
+                backgroundColor: "rgba(32,178,170,0.5)",
+                data: [54, 65, 60, 70, 70, 75]
+              }]
+            },
+                options: {
+                //cutoutPercentage: 40,
+                responsive: false,
+                  title: {
+                    display: true,
+                    text: 'Jia Ens Favourite Idols'
+                  }
+                }
+            });   
+        }
+
+        //Bar Chart to show which country has most covid cases?
+        function makeHBarChart() {
+
+            var hBarChart = new Chart('hBarChart', {
+                type: 'horizontalBar',
+                data: {
+                  labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+                  datasets: [
+                    {
+                      label: "Population (millions)",
+                      backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+                      data: [2478,5267,734,784,433]
+                    }
+                  ]
+                },
+                options: {
+                  responsive: false ,
+                  legend: { display: false },
+                  title: {
+                    display: true,
+                    text: 'Top 5 Countries with Covid'
+                  }
+                }
+            });
+        }
+    
+        
+
+        //Line Chart to show trend
 
     </script> 
   </body>
