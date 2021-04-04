@@ -197,10 +197,23 @@
                 }
             });
         }
-    
-        
+        //Read QX's text file, Country + #
+        function showType(fileInput) {
+          var files = fileInput.files;
 
-        //Line Chart to show trend
+          for (var i = 0; i < files.length; i++) {
+            var name = files[i].name;
+            var type = files[i].type;
+            alert("Filename: " + name + " , Type: " + type);
+          }
+        }
+    
+        //Button action listener then pass the "country" name into each individual methods and display charts accordingly
+        //SG
+        //MSIA
+
+        //SG --> charts with singapore's statistics 
+
 
     </script> 
   </body>

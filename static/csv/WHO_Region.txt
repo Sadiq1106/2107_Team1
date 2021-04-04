@@ -1,0 +1,6 @@
+Africa,694057
+Americas,8608605
+Eastern Mediterranean,1467209
+Europe,3259047
+South-East Asia,1732350
+Western Pacific,284973
