@@ -40,6 +40,76 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script>
 
+        d3.csv('static/csv/casesbycontinent.csv').then(makecontinent);
+        function makecontinent(country) {
+
+            var countryNames = country.map(function(d) {return d.Country});
+
+            var countryConfirmed = country.map(function(d) {return d.Cases});
+
+            var countryColors = country.map(function(d) {return d.Cases > 1222220 ? '#F15F36' : '#19A0AA';});
+
+            var chart = new Chart('casesbycontinent', {
+                type: 'horizontalBar',
+                options: {
+                  maintainAspectRatio: false,
+
+                  legend: {
+                    display: false
+                  },
+                  scales: {
+                    xAxes: [
+                      {
+                      }
+                    ]
+                  }
+                },
+                data: {
+                  labels: countryNames,
+                  datasets: [
+                    {
+                      data: countryConfirmed,
+                      backgroundColor: countryColors
+                    }
+                  ]
+                }
+            })
+        }
+        d3.csv('static/csv/casesbycountry.csv').then(makecountry);
+        function makecountry(country) {
+
+            var countryNames = country.map(function(d) {return d.Country});
+
+            var countryConfirmed = country.map(function(d) {return d.Cases});
+
+            var countryColors = country.map(function(d) {return d.Cases > 1222220 ? '#F15F36' : '#19A0AA';});
+
+            var chart = new Chart('casesbycountry', {
+                type: 'horizontalBar',
+                options: {
+                  maintainAspectRatio: false,
+
+                  legend: {
+                    display: false
+                  },
+                  scales: {
+                    xAxes: [
+                      {
+                      }
+                    ]
+                  }
+                },
+                data: {
+                  labels: countryNames,
+                  datasets: [
+                    {
+                      data: countryConfirmed,
+                      backgroundColor: countryColors
+                    }
+                  ]
+                }
+            })
+        }
        d3.csv('static/csv/vaccinationincome.csv').then(makeVacIncome);
         function makeVacIncome(country) {
             /* JavaScript’s .map() function to convert the array of objects into an array of player names and an array of weeks. We created a bar chart using Chart.js and used these two arrays to set the player labels and bar lengths.*/
@@ -106,6 +176,40 @@
                   datasets: [
                     {
                       data: countryConfirmed,
+                      backgroundColor: countryColors
+                    }
+                  ]
+                }
+            })
+        }
+        d3.csv('static/csv/tweetsentiment.csv').then(makesentiment);
+        function makesentiment(country) {
+
+            var keyword = country.map(function(d) {return d.Keyword});
+            var sentiment = country.map(function(d) {return d.positive});
+
+            var countryColors = country.map(function(d) {return d.positive > 80 ? '#F15F36' : '#19A0AA';});
+
+            var chart = new Chart('keywordchart', {
+                type: 'horizontalBar',
+                options: {
+                  maintainAspectRatio: false,
+
+                  legend: {
+                    display: false
+                  },
+                  scales: {
+                    xAxes: [
+                      {
+                      }
+                    ]
+                  }
+                },
+                data: {
+                  labels: keyword,
+                  datasets: [
+                    {
+                      data: sentiment,
                       backgroundColor: countryColors
                     }
                   ]
