@@ -7,8 +7,21 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route('/')
-def login():
+def home():
 	return render_template('home.html')
+
+@app.route('/covidcasesdata')
+def covidcases():
+	return render_template('covidcasesdata.html')
+
+@app.route('/vaccinationdata')
+def vaccination():
+	return render_template('vaccinationdata.html')
+
+
+@app.route('/tweetanalysis')
+def tweet():
+	return render_template('tweetanalysis.html')
 
 if __name__=='__main__':
 	app.run(debug=True)

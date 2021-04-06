@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Get Schooled</title>
+    <title>Corona Virus Analysis</title>
     <link rel="icon" href="/img/icon.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,37 +15,42 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
   </head>
   <body>
+<div class="wrapper">
+    <div class="sidebar">
+        <h2>Covid-19</h2>
+        <ul>
+            <li><a href="{{ url_for('home') }}"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="{{ url_for('covidcases') }}"><i class="fas fa-thermometer-full"></i>Covid Cases</a></li>
+            <li><a href="{{ url_for('vaccination') }}"><i class="fas fa-tint"></i>Vaccination</a></li>
+            <li><a href="{{ url_for('tweet') }}"><i class="fab fa-twitter"></i>    Tweet Sentiments</a></li>
+            <li><a href="{{ url_for('home') }}"><i class="fas fa-user"></i>Team</a></li>
+        </ul>
 
-    {% include 'includes/navbar.html' %}
+    </div>
     {% block body %} {% endblock %}
+
+    </div>
 
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script>
-        Chart.defaults.global.defaultFontFamily = 'Roboto';
-        Chart.defaults.global.defaultFontColor = '#333';
 
-        //d3.csv('static/csv/country_covid.csv').then(old)
-        makePieChart()
-        makePolarAreaChart()
-        makeRadarChart()
-        makeHBarChart()
-
-        //Bar Chart: Y Axis: Country ; X Axis: Confirmed COVID Cases
-        function old(country) {
+       d3.csv('static/csv/vaccinationincome.csv').then(makeVacIncome);
+        function makeVacIncome(country) {
             /* JavaScript’s .map() function to convert the array of objects into an array of player names and an array of weeks. We created a bar chart using Chart.js and used these two arrays to set the player labels and bar lengths.*/
             //get all the x axis (u can get this from the csv col name)
-            var countryNames = country.map(function(d) {return d.Country});
-            //then get all the y axis 
-            var countryConfirmed = country.map(function(d) {return d.Confirmed});
+            var countryNames = country.map(function(d) {return d.Income});
+            //then get all the y axis
+            var countryConfirmed = country.map(function(d) {return d.VaccinationAverage});
             //if want to highlight the bar colour
             var countryColors = country.map(function(d) {return d.Confirmed > 30000 ? '#F15F36' : '#19A0AA';});
 
-            var chart = new Chart('hBarChart', {
+            var chart = new Chart('vaccinationbyincome', {
                 type: 'horizontalBar',
                 options: {
                   maintainAspectRatio: false,
@@ -55,11 +60,6 @@
                   scales: {
                     xAxes: [
                       {
-                        scaleLabel: {
-                          display: true,
-                          labelString: '# of Cases',
-                          fontSize: 16
-                        }
                       }
                     ]
                   }
@@ -76,144 +76,67 @@
             })
         }
 
-        //pie chart
-        function makePieChart(){
-            var myChart = new Chart('pieChart', {
-                type: 'pie',
-                data: {
-                    labels: ['Africa', 'America', 'Eastern Mediterranean', 'Europe', 'South-East Asia', 'Western Pacific'],
-                    datasets: [{
-                    label: '# of Tomatoes',
-                    data: [694057, 8608605, 1467209, 3259047,1732350, 284973],
-                    backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(163, 0, 101, 0.2)',
-                    'rgba(81, 5, 235, 0.2)'
-                    ],
-                    borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(163, 0, 101, 1)',
-                    'rgba(81, 5, 235, 1)'
-                    ],
-                    borderWidth: 1
-                    }]
-                },
-                options: {
-                //cutoutPercentage: 40,
-                responsive: false,
-                title: {
-                    display: true,
-                    text: 'Number of confirmed cases in each WHO region',
-                    fontSize: 30
-                  }
-                }
-                });
-        }
-        //Polar Area Chart
-        function makePolarAreaChart(){
-            var polarAreaChart = new Chart('paChart', {
-              type: 'polarArea',
-              data: {
-              labels: ["Negative","Positive","Neutral","Unknwon"],
-              datasets: [{
-                data: [1200, 1700, 800, 200],
-                backgroundColor: [
-                  "rgba(255, 0, 0, 0.5)",
-                  "rgba(100, 255, 0, 0.5)",
-                  "rgba(200, 50, 255, 0.5)",
-                  "rgba(0, 100, 255, 0.5)"
-                ]
-              }]
-            },
-                options: {
-                //cutoutPercentage: 40,
-                responsive: false,
-                title: {
-                    display: true,
-                    text: 'Sentiment Analysis',
-                    fontSize: 30
-                  }
-                }
-            });       
-        }
 
-        //Scriptable Radar Chart to show sentiment analysis 
-        function makeRadarChart(){
-            var radarChart = new Chart('radarChart', {
-              type: 'radar',
-              data: {
-              labels: ["Sitang", "Mader", "Purnima", "Some Random Internet Baby", "Some Random Cat", "Green Tea"],
-              datasets: [{
-                label: "Sitang",
-                backgroundColor: "rgba(64,224,208,0.5)",
-                data: [65, 75, 70, 80, 60, 80]
-              }, {
-                label: "Purnima",
-                backgroundColor: "rgba(32,178,170,0.5)",
-                data: [54, 65, 60, 70, 70, 75]
-              }]
-            },
-                options: {
-                //cutoutPercentage: 40,
-                responsive: false,
-                  title: {
-                    display: true,
-                    text: 'Jia Ens Favourite Idols',
-                    fontSize: 30
-                  }
-                }
-            });   
-        }
+        d3.csv('static/csv/vaccinationbyregion.csv').then(makevacregion);
+        function makevacregion(country) {
 
-        //Bar Chart to show which country has most covid cases?
-        function makeHBarChart() {
+            var countryNames = country.map(function(d) {return d.Country});
 
-            var hBarChart = new Chart('hBarChart', {
+            var countryConfirmed = country.map(function(d) {return d.VaccinationRate});
+
+            var countryColors = country.map(function(d) {return d.VaccinationRate > 10 ? '#F15F36' : '#19A0AA';});
+
+            var chart = new Chart('vaccinationbyregion', {
                 type: 'horizontalBar',
+                options: {
+                  maintainAspectRatio: false,
+
+                  legend: {
+                    display: false
+                  },
+                  scales: {
+                    xAxes: [
+                      {
+                      }
+                    ]
+                  }
+                },
                 data: {
-                  labels: ["North America", "Latin America","Africa", "Asia", "Europe" ],
+                  labels: countryNames,
                   datasets: [
                     {
-                      label: "Population (millions)",
-                      backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-                      data: [5267,2478,734,784,433]
+                      data: countryConfirmed,
+                      backgroundColor: countryColors
                     }
                   ]
-                },
-                options: {
-                  responsive: false ,
-                  legend: { display: false },
-                  title: {
-                    display: true,
-                    text: 'Top 5 Countries with Covid',
-                    fontSize: 30
-                  }
                 }
-            });
+            })
         }
-        //Read QX's text file, Country + #
-        function showType(fileInput) {
-          var files = fileInput.files;
 
-          for (var i = 0; i < files.length; i++) {
-            var name = files[i].name;
-            var type = files[i].type;
-            alert("Filename: " + name + " , Type: " + type);
-          }
+        d3.csv('static/csv/topcasesbyregion.csv').then(maketopcases);
+
+        function maketopcases(country) {
+
+            var countryNames = country.map(function(d) {return d.Country});
+            var countryConfirmed = country.map(function(d) {return d.Cases});
+
+            var countryColors = country.map(function(d) {return d.Cases > 10 ? '#F15F36' : '#19A0AA';});
+            console.log(countryConfirmed);
+            var oilData = {
+                labels: countryNames,
+                datasets: [
+                    {
+                        data: [133.3, 86.2, 52.2, 51.2, 50.2],
+                        backgroundColor: countryColors
+                    }]
+        };
+
+        var topcaseschart = document.getElementById("topcasesbyregion");
+        var pieChart = new Chart(topcaseschart, {
+          type: 'pie',
+          data: oilData
+        });
         }
-    
-        //Button action listener then pass the "country" name into each individual methods and display charts accordingly
-        //SG
-        //MSIA
-
-        //SG --> charts with singapore's statistics 
-
 
     </script> 
   </body>

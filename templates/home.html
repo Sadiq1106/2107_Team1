@@ -1,58 +1,18 @@
 {% extends 'layout.html' %}
 
-{% block body %} 
-	<main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-    <h1>Hadoop Sweggerino</h1>
-    <input type="file" multiple onchange="showType(this)">
-    
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <canvas id="pieChart" height="400px" width="400px" style="margin:50px;"></canvas>
+{% block body %}
+
+
+
+    <div class="main_content">
+        <div class="header">Covid-19 Insight Analysis</div>
+        <div class="info">
+
+
+          <div>Hadoop based project that uses mapreduce to perform analysis on scrapped data, with regards to covid-19.</div>
+          <div> </div>
+          <div> </div>
+        </div>
     </div>
-    <div class="col">
-      <canvas id="paChart" height="400px" width="400px" style="margin:50px;"></canvas>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-       <canvas id="radarChart" height="400px" width="400px" style="margin:50px;"></canvas>
-    </div>
-    <div class="col">
-      <canvas id="hBarChart" height="400px" width="400px" style="margin:50px;"></canvas>
-    </div>
-  </div>
-</div>
-    <table class="table">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Username</th>
-      <th scope="col">Tweet</th>
-      <th scope="col">Likes</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Lu Liming Best</td>
-      <td>-5</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Purr</td>
-      <td>Purima Best</td>
-      <td>-69</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Sitang</td>
-      <td>Jia En's Favourite <3 Muacks Lots of Love</td>
-      <td>1234525324121324</td>
-    </tr>
-  </tbody>
-</table>
-  </main>
+
 {% endblock %}
