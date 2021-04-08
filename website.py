@@ -2,6 +2,7 @@ from flask import Flask, render_template
 
 #cd C:\Users\sadiq\Documents\Study Material\Y2T2\2107 Distributed Systems Programming\ICT2107_Project
 #cd C:\Users\sadiq\Desktop\2107_Team1
+#cd C:\Users\sadiq\Documents\GitHub\2107_Team1
 #python website.py
 
 app = Flask(__name__)
