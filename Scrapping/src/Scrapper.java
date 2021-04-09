@@ -1,4 +1,4 @@
-//By Ian
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +27,16 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class Scrapper {
 
+	/**
+
+	initialize constants
+	DoccatModel: sentiment analysis model, to detect positive or negative sentiment
+	url: coronavirus scraping data
+	vaccinationUrl: NYT vaccination data
+	keywords: keywords is a list of words to search on twitter to scrape tweets based on keywords
+	countries: list of countries to take from worldometers.info
+
+	**/
     public static DoccatModel model = null;
 	final static String url = "https://www.worldometers.info/coronavirus/country/";
 	final static String vaccinationUrl = "https://static01.nyt.com/newsgraphics/2021/01/19/world-vaccinations-tracker/6ff2598878b72ffa9e9bd6a14f25d1e554e9ebb3/all_with_rate.json";
@@ -37,9 +47,7 @@ public class Scrapper {
 			"safe distancing",
 			"tracetogether",
 			"rediscover voucher",
-			"moderna vaccine",
-			"coronavirus policy",
-			"covid19 policy"
+			"moderna vaccine"
 	};
 	final static String[] countries = {
 			"Singapore", 
@@ -63,13 +71,23 @@ public class Scrapper {
 	
 	public static void main(String[] args) {
 		
+
+		// this function scrapes and exports the vaccination data in csv
 		getVaccinationData(vaccinationUrl);
+
+
+
+		// this function scrapes and exports the covid cases in csv
 		
-		//writeCasesToCSV(countries);
+		writeCasesToCSV(countries);
+
+
+		// these two functions work in conjunction to write and analyze tweets
+		// the train model function is there to prepare the training data
 		
-		//trainModel(); 
+		trainModel(); 
 		
-		//gwriteTweetsToCSV(keywords);
+		writeTweetsToCSV(keywords);
 		
 	}
 	
@@ -78,26 +96,14 @@ public class Scrapper {
 		
 		try {
 
-			FileWriter csvWriter = new FileWriter("vaccinationdata.csv");
 			/**
-			csvWriter.append("Geo ID");
-			csvWriter.append(",");
-			csvWriter.append("Location");
-			csvWriter.append(",");
-			csvWriter.append("Total Vaccinations");
-			csvWriter.append(",");
-			csvWriter.append("Population");
-			csvWriter.append(",");
-			csvWriter.append("Continent");
-			csvWriter.append(",");
-			csvWriter.append("Vaccination Rate");
-			csvWriter.append(",");
-			csvWriter.append("GDP Per Capita");
-			csvWriter.append(",");
-			csvWriter.append("Region");
-			csvWriter.append(",");
-			csvWriter.append("Last Updated");
-			csvWriter.append("\n");**/
+			vaccination data is fetched from an api that returns a json file
+
+			the json file is parsed and converted to csv
+
+			**/
+
+			FileWriter csvWriter = new FileWriter("vaccinationdata.csv");
 			String json = readUrl(url);
 			System.out.println("Done scrapping vaccination data");
 			JSONArray jsonArray = new JSONArray(json);
@@ -117,8 +123,6 @@ public class Scrapper {
 				csvWriter.append(object.getString("CONTINENT"));
 				csvWriter.append(",");
 				csvWriter.append(object.getString("vaccinations_rate"));
-				csvWriter.append(",");
-				csvWriter.append(object.getString("IncomeGroup"));
 				csvWriter.append(",");
 				csvWriter.append(object.getString("gdp_per_cap"));
 				csvWriter.append(",");
@@ -143,17 +147,19 @@ public class Scrapper {
 	public static void writeCasesToCSV(String[] countries) {
 		try {
 			
+			/**
+			the corona data is crawled from worldometers
+			it append the country name to the end of the url
+			and hits every link and adds them to a list
+
+			**/
 
 			FileWriter csvWriter = new FileWriter("dailycoronadata.csv");
-			csvWriter.append("Country");
-			csvWriter.append(",");
-			csvWriter.append("Date");
-			csvWriter.append(",");
-			csvWriter.append("Number of Cases");
-			csvWriter.append("\n");
 			
 			for (String i : countries) {
 				final String tempUrl = url + i;
+
+				//this calls the function to scrape the daily cases
 				String[] dailyLabels = getDailyCasesLabel(tempUrl);
 				String[] dailyData = getDailyCasesData(tempUrl);
 
@@ -192,13 +198,6 @@ public class Scrapper {
 		try {
 
 			FileWriter csvWriter = new FileWriter("tweets.csv");
-
-			csvWriter.append("Keyword");
-			csvWriter.append(",");
-			csvWriter.append("Tweet");
-			csvWriter.append(",");
-			csvWriter.append("Sentiment");
-			csvWriter.append("\n");
 			
 			for (String j : keywords) {
 				System.out.println(j);
@@ -280,6 +279,12 @@ public class Scrapper {
 		
 	}
 	
+
+
+    /**
+	crawl the website and retrieve the cases data from the javascript side
+
+    **/
 	public static String[] getDailyCasesData(String url) {
 		String[] emptyArray = new String[0];
 		try {
@@ -289,7 +294,7 @@ public class Scrapper {
 			for (Element element : scriptElements) {
 				if (element.data().contains("Daily New Cases")) {
 
-			        
+			        //regex pattern to detect json file and object called "Data"
 			        Pattern patternData = Pattern.compile(".*?data: ([^}]*)}");
 			        Matcher matcherData = patternData.matcher(element.data());
 			        if (matcherData.find()) {
@@ -310,9 +315,14 @@ public class Scrapper {
 		return emptyArray;
 	}
 
+    /**
+	call the twitter api to scrape the tweets
+    **/
     public static String[] getTweets(String name,boolean isPopular){
         Twitter twitter = TwitterFactory.getSingleton();
         Query query = new Query(name+"+exclude:retweets");
+
+        //make query depending on popular or recent tweets
         if (isPopular)
             query.resultType(Query.POPULAR);
         else
@@ -337,6 +347,11 @@ public class Scrapper {
 
     }
 
+
+    /**
+	train the model for sentiment analysis
+
+    **/
     public static void trainModel() {
         MarkableFileInputStreamFactory dataIn = null;
         try {
