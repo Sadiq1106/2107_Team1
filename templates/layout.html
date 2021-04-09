@@ -57,6 +57,10 @@
                   legend: {
                     display: false
                   },
+                  title: {
+                        display: true,
+                        text: 'Total Cases by Continent'
+                    },
                   scales: {
                     xAxes: [
                       {
@@ -87,11 +91,16 @@
             var chart = new Chart('casesbycountry', {
                 type: 'horizontalBar',
                 options: {
+
                   maintainAspectRatio: false,
 
                   legend: {
                     display: false
                   },
+                  title: {
+                        display: true,
+                        text: 'Total Cases by Country'
+                    },
                   scales: {
                     xAxes: [
                       {
@@ -127,6 +136,10 @@
                   legend: {
                     display: false
                   },
+                  title: {
+                        display: true,
+                        text: 'Vaccination rate (%) by Income'
+                    },
                   scales: {
                     xAxes: [
                       {
@@ -164,6 +177,50 @@
                   legend: {
                     display: false
                   },
+                  title: {
+                        display: true,
+                        text: 'Vaccination Rate (%) by Region'
+                    },
+                  scales: {
+                    xAxes: [
+                      {
+                      }
+                    ]
+                  }
+                },
+                data: {
+                  labels: countryNames,
+                  datasets: [
+                    {
+                      data: countryConfirmed,
+                      backgroundColor: countryColors
+                    }
+                  ]
+                }
+            })
+        }
+
+        d3.csv('static/csv/RecoveryRate.csv').then(makeRecoveryRate);
+        function makeRecoveryRate(country) {
+
+            var countryNames = country.map(function(d) {return d.Country});
+
+            var countryConfirmed = country.map(function(d) {return d.Rate});
+
+            var countryColors = country.map(function(d) {return d.Rate > 60 ? '#F15F36' : '#19A0AA';});
+
+            var chart = new Chart('chartRecoveryRate', {
+                type: 'horizontalBar',
+                options: {
+                  maintainAspectRatio: false,
+
+                  legend: {
+                    display: false
+                  },
+                  title: {
+                        display: true,
+                        text: 'Recovery Rate per Country'
+                    },
                   scales: {
                     xAxes: [
                       {
@@ -198,6 +255,10 @@
                   legend: {
                     display: false
                   },
+                  title: {
+                        display: true,
+                        text: 'Percentage (%) of Positive Sentiments per Keyword'
+                    },
                   scales: {
                     xAxes: [
                       {
@@ -216,31 +277,46 @@
                 }
             })
         }
-
         d3.csv('static/csv/topcasesbyregion.csv').then(maketopcases);
-
         function maketopcases(country) {
 
             var countryNames = country.map(function(d) {return d.Country});
             var countryConfirmed = country.map(function(d) {return d.Cases});
 
             var countryColors = country.map(function(d) {return d.Cases > 10 ? '#F15F36' : '#19A0AA';});
-            console.log(countryConfirmed);
-            var oilData = {
-                labels: countryNames,
-                datasets: [
-                    {
-                        data: [133.3, 86.2, 52.2, 51.2, 50.2],
-                        backgroundColor: countryColors
-                    }]
-        };
 
-        var topcaseschart = document.getElementById("topcasesbyregion");
-        var pieChart = new Chart(topcaseschart, {
-          type: 'pie',
-          data: oilData
-        });
+            var chart = new Chart('topcasesbyregion', {
+                type: 'horizontalBar',
+                options: {
+                  maintainAspectRatio: false,
+
+                  legend: {
+                    display: false
+                  },
+                  title: {
+                        display: true,
+                        text: 'Percentage (%) of Positive Sentiments per Keyword'
+                    },
+                  scales: {
+                    xAxes: [
+                      {
+                      }
+                    ]
+                  }
+                },
+                data: {
+                  labels: countryNames,
+                  datasets: [
+                    {
+                      data: countryConfirmed,
+                      backgroundColor: countryColors
+                    }
+                  ]
+                }
+            })
         }
+
+
 
     </script> 
   </body>
